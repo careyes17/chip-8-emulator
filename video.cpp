@@ -80,12 +80,13 @@ void Video::clear() {
 }
 
 void Video::update() {
-    clear();
-    drawPixels();
     return;
 }
 
 void Video::render() {
+    // draw pixels to renderer
+    clear();
+    drawPixels();
     // Render the rect to the screen
     SDL_RenderPresent(renderer);
     return;
