@@ -3,10 +3,9 @@
 #include "headers/sound.h"
 #include "headers/cpu.h"
 
-class Chip8 {
+class Chip8 : public Video{
     private:
         Cpu cpu;
-        Video video;
         Sound sound;
     public:
         Chip8();
