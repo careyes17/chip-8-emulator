@@ -1,1 +1,1 @@
-g++ $(sdl2-config --cflags) -Wall -o main *.cpp $(sdl2-config --libs)
+g++ $(sdl2-config --cflags) -Wall -o main *.cpp $(sdl2-config --libs) -std=c++1z
