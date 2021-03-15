@@ -1,13 +1,20 @@
 #pragma once
-#include "headers/video.h"
-#include "headers/sound.h"
-#include "headers/cpu.h"
+#include "engine.h"
+#include "cpu.h"
 
-class Chip8 : public Video{
+#define SCREENWIDTH 960
+#define SCREENHEIGHT 480
+#define PIXELWIDTH 15
+#define PIXELHEIGHT 15
+#define NUMOFTOTALPIXELS (SCREENWIDTH/PIXELWIDTH)*(SCREENHEIGHT/PIXELHEIGHT)
+#define FPS 60.0
+
+class Chip8 : public Engine {
     private:
         Cpu cpu;
-        Sound sound;
     public:
-        Chip8();
-        ~Chip8();
+        Chip8(std::vector<char>& pixels):
+            Engine(SCREENWIDTH, SCREENHEIGHT, PIXELWIDTH, PIXELHEIGHT, FPS, pixels){};
+        ~Chip8(){};
+        void update() override;
 };

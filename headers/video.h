@@ -3,6 +3,18 @@
 #include <iostream>
 #include <vector>
 
+struct Pixels {
+    std::vector<char> pixels;
+    void init(int numberOfTotalPixels) {
+        // resizing pixels vector to appropriate size
+        pixels.resize(0);
+        pixels.resize(numberOfTotalPixels, 1);
+
+        // setting random test values in pixels
+        for (int i = 0; i < numberOfTotalPixels; i++) pixels[i] = rand() % 2;
+    }
+};
+
 struct VideoProps {
     int screenWidth;
     int screenHeight;
@@ -79,7 +91,7 @@ class Video {
         ~Video();
         void init();
         void pollInput();
-        void update();
+        virtual void update(){};
         void render();
         void loop();
 

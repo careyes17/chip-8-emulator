@@ -79,10 +79,6 @@ void Video::clear() {
     SDL_RenderClear(renderer);
 }
 
-void Video::update() {
-    return;
-}
-
 void Video::render() {
     // draw pixels to renderer
     clear();
