@@ -17,7 +17,8 @@ class Chip8 : public Engine {
     public:
         Chip8(std::vector<char>* pixels):
             Engine(SCREENWIDTH, SCREENHEIGHT, PIXELWIDTH, PIXELHEIGHT, FPS, pixels),
-            pixels(NULL){
+            pixels(NULL),
+            cpu(){
                 this->pixels = pixels;
             };
         ~Chip8(){};
