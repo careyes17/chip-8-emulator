@@ -24,8 +24,8 @@ class Cpu {
         unsigned char ram[4096]; // 4k ram
         unsigned char registers[16]; // 16 8-bit registers
         unsigned short int I; // 16-bit address regsiter 
-        unsigned char time; // 8-bit time register
-        unsigned char sound;  // 8-bit sound register
+        unsigned char DT; // 8-bit time register
+        unsigned char ST;  // 8-bit sound register
         unsigned short int PC; // 16-bit program counter
         unsigned char SP; // 8-bit stack pointer
         unsigned short int stack[16]; // 16 slot 16-bit stack 
@@ -66,4 +66,6 @@ class Cpu {
             // }
         };
         ~Cpu(){};
+        void step();
+        void decrementSoundAndTime();
 };
