@@ -3,11 +3,11 @@
 #include <vector>
 #include "headers/video.h"
 
-Video::Video(int screenWidth, int screenHeight, int pixelWidth, int pixelHeight, double fps, std::vector<char>& pixels):
+Video::Video(int screenWidth, int screenHeight, int pixelWidth, int pixelHeight, double fps, std::vector<char>* pixels):
     window(NULL),
     renderer(NULL),
     fps(fps),
-    pixels(pixels),
+    pixels(NULL),
     running(true) {
         props.screenWidth = screenWidth;
         props.screenHeight = screenHeight;
@@ -15,6 +15,8 @@ Video::Video(int screenWidth, int screenHeight, int pixelWidth, int pixelHeight,
         props.pixelHeight = pixelHeight;
         props.rows = screenHeight/pixelHeight;
         props.cols = screenWidth/pixelWidth;
+
+        this->pixels = pixels;
     }
 
 Video::~Video() {
@@ -124,7 +126,7 @@ void Video::loop() {
 }
 
 void Video::updatePixel(int x, int y, bool on) {
-    pixels[(x * props.cols) + y] = on;
+    (*pixels)[(x * props.cols) + y] = on;
     return;
 }
 
@@ -146,7 +148,7 @@ void Video::drawPixels() {
 
         // std::cout << x << " " << y << std::endl;
 
-        int color = pixels[i] ? 255 : 0;
+        int color = (*pixels)[i] ? 255 : 0;
 
         // Render rect
         SDL_SetRenderDrawColor(renderer, color, color, color, 255);

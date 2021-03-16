@@ -4,15 +4,19 @@
 #include <vector>
 
 struct Pixels {
-    std::vector<char> pixels;
-    void init(int numberOfTotalPixels) {
+    std::vector<char>* pixels;
+    void init (int numOfTotalPixels) {
         // resizing pixels vector to appropriate size
-        pixels.resize(0);
-        pixels.resize(numberOfTotalPixels, 1);
+        this->pixels = new std::vector<char>();
+        pixels->resize(0);
+        pixels->resize(numOfTotalPixels, 1);
 
         // setting random test values in pixels
-        for (int i = 0; i < numberOfTotalPixels; i++) pixels[i] = rand() % 2;
-    }
+        for (int i = 0; i < numOfTotalPixels; i++) (*pixels)[i] = rand() % 2;
+    };
+    void destroy() {
+        delete pixels;
+    };
 };
 
 struct VideoProps {
@@ -82,12 +86,12 @@ class Video {
         VideoProps props;
         
         double fps;
-        std::vector<char> pixels;
+        std::vector<char>* pixels;
         
         bool running;
 
     public:
-        Video(int screenWidth, int screenHeight, int pixelWidth, int pixelHeight, double fps, std::vector<char>& pixels);
+        Video(int screenWidth, int screenHeight, int pixelWidth, int pixelHeight, double fps, std::vector<char>* pixels);
         ~Video();
         void init();
         void pollInput();

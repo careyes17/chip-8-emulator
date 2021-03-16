@@ -15,5 +15,7 @@ int main(int argc, char* args[]) {
     chip8.init();
     chip8.loop(); // inifinite game loop
 
+    pixels.destroy();
+
     return EXIT_SUCCESS;
 }

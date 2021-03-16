@@ -6,4 +6,5 @@ void Chip8::update() {
 
     // debug
     if (keyPressed(KEY_A)) printf("a");
+    for (int i = 0; i < 2048; i++) (*pixels)[i] = rand() % 2;
 }
