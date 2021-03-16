@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 
 enum registers {
     V0,
@@ -58,6 +59,11 @@ class Cpu {
                 }
             }
 
+            // testing low high nibble getters
+            // unsigned char test = 0b10111101;
+            // printf("high nibble %d\n", getHighNibble(test));
+            // printf("low nibble %d\n", getLowNibble(test));
+
             // display characters for debug
             // for (int i = 0; i < 16; i++) { // 16 characters
             //     for (int j = 0; j < 5; j++) { // 5 bytes per character
@@ -67,5 +73,8 @@ class Cpu {
         };
         ~Cpu(){};
         void step();
+        void instruction(unsigned char high, unsigned char low);
         void decrementSoundAndTime();
+        unsigned char getHighNibble(unsigned char byte);
+        unsigned char getLowNibble(unsigned char byte);
 };
