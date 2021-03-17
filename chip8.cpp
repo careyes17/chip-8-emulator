@@ -3,8 +3,12 @@
 
 void Chip8::update() {
     cpuFPSCap.updateTime();
-    for (int i = 0; i < cpuFPSCap.getNumberOfUpdates(); i++) {
+    int cpuCycles = cpuFPSCap.getNumberOfUpdates();
+    for (int i = 0; i < cpuCycles; i++) {
         // operations happen at 500 hz
+
+        // debug
+        // cpu.ins.instructionFunctions[CLS](0x04,0x07);
     }
 
     // debug

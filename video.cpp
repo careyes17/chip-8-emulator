@@ -113,7 +113,8 @@ void Video::loop() {
 
         pollInput();
 
-        for (int i = 0; i < gameFPSCap.getNumberOfUpdates(); i++) {
+        int fpsIterations = gameFPSCap.getNumberOfUpdates();
+        for (int i = 0; i < fpsIterations; i++) {
             update(); // update game logic
         }
 

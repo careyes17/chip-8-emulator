@@ -1,47 +1,9 @@
 #pragma once
 #include <iostream>
-
-enum Instruction {
-    ERROR = -1,
-    SYS_ADDR = 0,
-    CLS,
-    RET,
-    JP_ADDR,
-    CALL_ADDR,
-    SE_VX_BYTE,
-    SNE_VX_BYTE,
-    SE_VX_VY,
-    LD_VX_BYTE,
-    ADD_VX_BYTE,
-    LD_VX_VY,
-    OR_VX_VY,
-    AND_VX_VY,
-    XOR_VX_VY,
-    ADD_VX_VY,
-    SUB_VX_VY,
-    SHR_VX_VY,
-    SUBN_VX_VY,
-    SHL_VX_VY,
-    SNE_VX_VY,
-    LD_I_ADDR,
-    JP_V0_ADDR,
-    RND_VX_BYTE,
-    DRW_VX_VY_NIBBLE,
-    SKP_VX,
-    SKNP_VX,
-    LD_VX_DT,
-    LD_VX_K,
-    LD_DT_VX,
-    LD_ST_VX,
-    ADD_I_VX,
-    LD_F_VX,
-    LD_B_VX,
-    LD_I_VX,
-    LD_VX_I
-};
+#include "instructions.h"
 
 enum registers {
-    V0,
+    V0 = 0,
     V1,
     V2,
     V3,
@@ -68,8 +30,9 @@ class Cpu {
         unsigned char ST;  // 8-bit sound register
         unsigned short int PC; // 16-bit program counter
         unsigned char SP; // 8-bit stack pointer
-        unsigned short int stack[16]; // 16 slot 16-bit stack 
+        unsigned short int stack[16]; // 16 slot 16-bit stack
     public:
+        Instructions ins;
         Cpu() {
             // init characters in "interpreter" portion of ram
             // this takes up 16 * 5 (80) bytes at the start of ram
@@ -97,6 +60,8 @@ class Cpu {
                     ram[5*i + j] = characters[i][j];
                 }
             }
+
+            ins.init();
 
             // testing low high nibble getters
             // unsigned char test = 0b10111101;
