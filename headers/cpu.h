@@ -77,9 +77,11 @@ class Cpu {
 
         // instruction extraction and execution
         Instruction getInstruction(unsigned char high, unsigned char low);
-        void executeInstruction(Instruction instruction);
+        void executeInstruction(Instruction instruction, unsigned char high, unsigned char low);
         
         // bit manipulation methods
+        unsigned char getHighByte(unsigned short int word);
+        unsigned char getLowByte(unsigned short int word);
         unsigned char getHighNibble(unsigned char byte);
         unsigned char getLowNibble(unsigned char byte);
         unsigned short int createAddress(unsigned char high, unsigned char low);

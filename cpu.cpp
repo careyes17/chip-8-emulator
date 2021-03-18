@@ -158,8 +158,92 @@ Instruction Cpu::getInstruction(unsigned char high, unsigned char low) {
     return ERROR;
 }
 
-void Cpu::executeInstruction(Instruction instruction) {
+void Cpu::executeInstruction(Instruction instruction, unsigned char high, unsigned char low) {
     // switch statement targeting the correct function per instruction
+    switch(instruction) {
+        case ERROR: 
+            break;
+        case SYS_ADDR: 
+            break;
+        case CLS: 
+            break;
+        case RET: 
+            break;
+        case JP_ADDR: 
+            break;
+        case CALL_ADDR: 
+            break;
+        case SE_VX_BYTE: 
+            break;
+        case SNE_VX_BYTE: 
+            break;
+        case SE_VX_VY: 
+            break;
+        case LD_VX_BYTE: 
+            break;
+        case ADD_VX_BYTE: 
+            break;
+        case LD_VX_VY: 
+            break;
+        case OR_VX_VY: 
+            break;
+        case AND_VX_VY: 
+            break;
+        case XOR_VX_VY: 
+            break;
+        case ADD_VX_VY: 
+            break;
+        case SUB_VX_VY: 
+            break;
+        case SHR_VX_VY: 
+            break;
+        case SUBN_VX_VY: 
+            break;
+        case SHL_VX_VY: 
+            break;
+        case SNE_VX_VY: 
+            break;
+        case LD_I_ADDR: 
+            break;
+        case JP_V0_ADDR: 
+            break;
+        case RND_VX_BYTE: 
+            break;
+        case DRW_VX_VY_NIBBLE: 
+            break;
+        case SKP_VX: 
+            break;
+        case SKNP_VX: 
+            break;
+        case LD_VX_DT: 
+            break;
+        case LD_VX_K: 
+            break;
+        case LD_DT_VX: 
+            break;
+        case LD_ST_VX: 
+            break;
+        case ADD_I_VX: 
+            break;
+        case LD_F_VX: 
+            break;
+        case LD_B_VX: 
+            break;
+        case LD_I_VX: 
+            break;
+        case LD_VX_I: 
+            break;
+        default:
+            break;
+    }
+}
+
+unsigned char Cpu::getHighByte(unsigned short int word) {
+    return word >> 8;
+}
+
+unsigned char Cpu::getLowByte(unsigned short int word) {
+    return word & 0x00ff;
 }
 
 unsigned char Cpu::getHighNibble(unsigned char byte) {
