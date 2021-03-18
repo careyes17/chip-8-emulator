@@ -40,6 +40,10 @@ enum Instruction {
     LD_VX_I
 };
 
+static unsigned short int createAddress(unsigned char high, unsigned char low) {
+    return (unsigned short int)(high << 8) + (unsigned short int)low;
+}
+
 typedef void (*instructionFunction)(unsigned char high, unsigned char low);
 
 static void sys_addr_func (unsigned char high, unsigned char low) {
@@ -49,7 +53,10 @@ static void sys_addr_func (unsigned char high, unsigned char low) {
 static void cls_func (unsigned char high, unsigned char low) {
     
     // debug
-    // std::cout << "0";
+    // unsigned char high_debug = 0x12;
+    // unsigned char low_debug = 0x34;
+    // unsigned short int ca = createAddress(high_debug, low_debug);
+    // printf(">>>>%d<<<<", ca);
 }
 
 static void ret_func (unsigned char high, unsigned char low) {
