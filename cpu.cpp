@@ -161,77 +161,112 @@ Instruction Cpu::getInstruction(unsigned char high, unsigned char low) {
 void Cpu::executeInstruction(Instruction instruction, unsigned char high, unsigned char low) {
     // switch statement targeting the correct function per instruction
     switch(instruction) {
-        case ERROR: 
+        case ERROR:
             break;
-        case SYS_ADDR: 
+        case SYS_ADDR:
+            sys_addr_func(high, low);
             break;
-        case CLS: 
+        case CLS:
+            cls_func(high, low);
             break;
-        case RET: 
+        case RET:
+            ret_func(high, low);
             break;
         case JP_ADDR: 
+            jp_addr_func(high, low);
             break;
-        case CALL_ADDR: 
+        case CALL_ADDR:
+            call_addr_func(high, low);
             break;
-        case SE_VX_BYTE: 
+        case SE_VX_BYTE:
+            se_vx_byte_func(high, low);
             break;
-        case SNE_VX_BYTE: 
+        case SNE_VX_BYTE:
+            sne_vx_btye_func(high, low);
             break;
-        case SE_VX_VY: 
+        case SE_VX_VY:
+            se_vx_vy_func(high, low);
             break;
-        case LD_VX_BYTE: 
+        case LD_VX_BYTE:
+            ld_vx_byte_func(high, low);
             break;
-        case ADD_VX_BYTE: 
+        case ADD_VX_BYTE:
+            add_vx_byte_func(high, low);
             break;
-        case LD_VX_VY: 
+        case LD_VX_VY:
+            ld_vx_vy_func(high, low);
             break;
-        case OR_VX_VY: 
+        case OR_VX_VY:
+            or_vx_vy_func(high, low);
             break;
-        case AND_VX_VY: 
+        case AND_VX_VY:
+            and_vx_vy_func(high, low);
             break;
-        case XOR_VX_VY: 
+        case XOR_VX_VY:
+            xor_vx_vy_func(high, low);
             break;
-        case ADD_VX_VY: 
+        case ADD_VX_VY:
+            add_vx_vy_func(high, low);
             break;
-        case SUB_VX_VY: 
+        case SUB_VX_VY:
+            sub_vx_vy_func(high, low);
             break;
-        case SHR_VX_VY: 
+        case SHR_VX_VY:
+            shr_vx_vy_func(high, low);
             break;
-        case SUBN_VX_VY: 
+        case SUBN_VX_VY:
+            subn_vx_vy_func(high, low);
             break;
-        case SHL_VX_VY: 
+        case SHL_VX_VY:
+            shl_vx_vy_func(high, low);
             break;
-        case SNE_VX_VY: 
+        case SNE_VX_VY:
+            sne_vx_vy_func(high, low);
             break;
-        case LD_I_ADDR: 
+        case LD_I_ADDR:
+            ld_i_addr_func(high, low);
             break;
-        case JP_V0_ADDR: 
+        case JP_V0_ADDR:
+            jp_v0_addr_func(high, low);
             break;
-        case RND_VX_BYTE: 
+        case RND_VX_BYTE:
+            rnd_vx_byte_func(high, low);
             break;
-        case DRW_VX_VY_NIBBLE: 
+        case DRW_VX_VY_NIBBLE:
+            drw_vx_vy_nibble_func(high, low);
             break;
-        case SKP_VX: 
+        case SKP_VX:
+            skp_vx_func(high, low);
             break;
-        case SKNP_VX: 
+        case SKNP_VX:
+            sknp_vx_func(high, low);
             break;
-        case LD_VX_DT: 
+        case LD_VX_DT:
+            ld_vx_dt_func(high, low);
             break;
-        case LD_VX_K: 
+        case LD_VX_K:
+            ld_vx_k_func(high, low);
             break;
-        case LD_DT_VX: 
+        case LD_DT_VX:
+            ld_dt_vx_func(high, low);
             break;
-        case LD_ST_VX: 
+        case LD_ST_VX:
+            ld_st_vx_func(high, low);
             break;
-        case ADD_I_VX: 
+        case ADD_I_VX:
+            add_i_vx_func(high, low);
             break;
-        case LD_F_VX: 
+        case LD_F_VX:
+            ld_f_vx_func(high, low);
             break;
-        case LD_B_VX: 
+        case LD_B_VX:
+            ld_b_vx_func(high, low);
             break;
-        case LD_I_VX: 
+        case LD_I_VX:
+            ld_i_vx_func(high, low);
             break;
-        case LD_VX_I: 
+        case LD_VX_I:
+            ld_vx_i_func(high, low);
             break;
         default:
             break;
