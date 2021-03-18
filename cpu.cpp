@@ -38,6 +38,49 @@
     Fx65 - LD Vx, [I]
 */
 
+Cpu::Cpu() {
+    // init characters in "interpreter" portion of ram
+    // this takes up 16 * 5 (80) bytes at the start of ram
+    unsigned char characters[16][5] = {
+        {0xf0, 0x90, 0x90, 0x90, 0xf0}, // character 0
+        {0x20, 0x60, 0x20, 0x20, 0x70}, // character 1
+        {0xf0, 0x10, 0xf0, 0x80, 0xf0}, // character 2
+        {0xf0, 0x10, 0xf0, 0x10, 0xf0}, // character 3
+        {0x90, 0x90, 0xF0, 0x10, 0x10}, // character 4
+        {0xf0, 0x80, 0xf0, 0x10, 0xf0}, // character 5
+        {0xf0, 0x80, 0xf0, 0x90, 0xf0}, // character 6
+        {0xf0, 0x10, 0x20, 0x40, 0x40}, // character 7
+        {0xf0, 0x90, 0xf0, 0x90, 0xf0}, // character 8
+        {0xf0, 0x90, 0xf0, 0x10, 0xf0}, // character 9
+        {0xf0, 0x90, 0xf0, 0x90, 0x90}, // character a
+        {0xe0, 0x90, 0xe0, 0x90, 0xe0}, // character b
+        {0xf0, 0x80, 0x80, 0x80, 0xf0}, // character c
+        {0xe0, 0x90, 0x90, 0x90, 0xe0}, // character d
+        {0xf0, 0x80, 0xf0, 0x80, 0xf0}, // character e
+        {0xf0, 0x80, 0xf0, 0x80, 0x80} // character f
+    };
+
+    for (int i = 0; i < 16; i++) { // 16 characters
+        for (int j = 0; j < 5; j++) { // 5 bytes per character
+            ram[5*i + j] = characters[i][j];
+        }
+    }
+
+    // testing low high nibble getters
+    // unsigned char test = 0b10111101;
+    // printf("high nibble %d\n", getHighNibble(test));
+    // printf("low nibble %d\n", getLowNibble(test));
+
+    // display characters for debug
+    // for (int i = 0; i < 16; i++) { // 16 characters
+    //     for (int j = 0; j < 5; j++) { // 5 bytes per character
+    //         printf("%d\n", ram[5*i + j]);
+    //     }
+    // }
+};
+
+Cpu::~Cpu(){};
+
 void Cpu::step() {
     // takes next "clock cycle" step
     
@@ -115,10 +158,161 @@ Instruction Cpu::getInstruction(unsigned char high, unsigned char low) {
     return ERROR;
 }
 
+void Cpu::executeInstruction(Instruction instruction) {
+    // switch statement targeting the correct function per instruction
+}
+
 unsigned char Cpu::getHighNibble(unsigned char byte) {
     return (byte & 0b11110000) >> 4;
 }
 
 unsigned char Cpu::getLowNibble(unsigned char byte) {
     return byte & 0b00001111;
+}
+
+unsigned short int Cpu::createAddress(unsigned char high, unsigned char low) {
+    return (unsigned short int)(high << 8) + (unsigned short int)low;
+}
+
+void Cpu::sys_addr_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::cls_func(unsigned char high, unsigned char low) {
+    
+    // debug
+    unsigned short int ca = createAddress(high, low);
+    printf(">>>>%d<<<<", ca);
+}
+
+void Cpu::ret_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::jp_addr_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::call_addr_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::se_vx_byte_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::sne_vx_btye_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::se_vx_vy_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::ld_vx_byte_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::add_vx_byte_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::ld_vx_vy_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::or_vx_vy_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::and_vx_vy_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::xor_vx_vy_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::add_vx_vy_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::sub_vx_vy_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::shr_vx_vy_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::subn_vx_vy_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::shl_vx_vy_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::sne_vx_vy_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::ld_i_addr_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::jp_v0_addr_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::rnd_vx_byte_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::drw_vx_vy_nibble_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::skp_vx_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::sknp_vx_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::ld_vx_dt_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::ld_vx_k_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::ld_dt_vx_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::ld_st_vx_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::add_i_vx_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::ld_f_vx_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::ld_b_vx_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::ld_i_vx_func(unsigned char high, unsigned char low) {
+
+}
+
+void Cpu::ld_vx_i_func(unsigned char high, unsigned char low) {
+
 }

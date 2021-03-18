@@ -8,7 +8,7 @@ void Chip8::update() {
         // operations happen at 500 hz
 
         // debug
-        // cpu.ins.instructionFunctions[CLS](0x04,0x07);
+        // cpu.cls_func(0x12,0x34);
     }
 
     // debug
