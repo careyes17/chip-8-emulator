@@ -305,31 +305,45 @@ void Cpu::cls_func(unsigned char high, unsigned char low) {
 }
 
 void Cpu::ret_func(unsigned char high, unsigned char low) {
-
+    PC = stack[SP];
+    SP--;
 }
 
 void Cpu::jp_addr_func(unsigned char high, unsigned char low) {
-
+    unsigned char highLowNibble = getLowNibble(high);
+    PC = createAddress(highLowNibble, low);
 }
 
 void Cpu::call_addr_func(unsigned char high, unsigned char low) {
-
+    SP++;
+    stack[SP] = PC;
+    unsigned char highLowNibble = getLowNibble(high);
+    PC = createAddress(highLowNibble, low);
 }
 
 void Cpu::se_vx_byte_func(unsigned char high, unsigned char low) {
-
+    unsigned char highLowNibble = getLowNibble(high);
+    unsigned char vx = registers[highLowNibble];
+    if (vx == low) PC += 0x04;
 }
 
 void Cpu::sne_vx_btye_func(unsigned char high, unsigned char low) {
-
+    unsigned char highLowNibble = getLowNibble(high);
+    unsigned char vx = registers[highLowNibble];
+    if (vx != low) PC += 0x04;
 }
 
 void Cpu::se_vx_vy_func(unsigned char high, unsigned char low) {
-
+    unsigned char highLowNibble = high = getLowNibble(high);
+    unsigned char vx = registers[highLowNibble];
+    unsigned char lowHighNibble = getHighNibble(low);
+    unsigned char vy = registers[lowHighNibble];
+    if (vx == vy) PC += 0x04;
 }
 
 void Cpu::ld_vx_byte_func(unsigned char high, unsigned char low) {
-
+    unsigned char highLowNibble = high = getLowNibble(high);
+    registers[highLowNibble] = low;
 }
 
 void Cpu::add_vx_byte_func(unsigned char high, unsigned char low) {
