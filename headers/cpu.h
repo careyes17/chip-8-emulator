@@ -69,8 +69,9 @@ class Cpu {
         unsigned short int PC; // 16-bit program counter
         unsigned char SP; // 8-bit stack pointer
         unsigned short int stack[16]; // 16 slot 16-bit stack
+        std::vector<char>* pixels; // 64 x 32 pixel bitmap
     public:
-        Cpu();
+        Cpu(std::vector<char>* pixels);
         ~Cpu();
         void step();
         void decrementSoundAndTime();

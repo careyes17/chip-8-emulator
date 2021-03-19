@@ -1,4 +1,5 @@
 #include "headers/cpu.h"
+#include <vector>
 
 /* instructions
     0nnn - SYS addr
@@ -38,7 +39,7 @@
     Fx65 - LD Vx, [I]
 */
 
-Cpu::Cpu() {
+Cpu::Cpu(std::vector<char>* pixels) {
     // init characters in "interpreter" portion of ram
     // this takes up 16 * 5 (80) bytes at the start of ram
     unsigned char characters[16][5] = {
@@ -65,6 +66,8 @@ Cpu::Cpu() {
             ram[5*i + j] = characters[i][j];
         }
     }
+
+    this->pixels = pixels;
 
     // testing low high nibble getters
     // unsigned char test = 0b10111101;
@@ -294,14 +297,11 @@ unsigned short int Cpu::createAddress(unsigned char high, unsigned char low) {
 }
 
 void Cpu::sys_addr_func(unsigned char high, unsigned char low) {
-
+    // not to be implemented in a modern emulator
 }
 
 void Cpu::cls_func(unsigned char high, unsigned char low) {
-    
-    // debug
-    unsigned short int ca = createAddress(high, low);
-    printf(">>>>%d<<<<", ca);
+    for (int i = 0; i < 2048; i++) (*pixels)[i] = 0; // turning pixels "off"
 }
 
 void Cpu::ret_func(unsigned char high, unsigned char low) {

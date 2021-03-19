@@ -20,7 +20,7 @@ class Chip8 : public Engine {
         Chip8(std::vector<char>* pixels):
             Engine(SCREENWIDTH, SCREENHEIGHT, PIXELWIDTH, PIXELHEIGHT, FPS, pixels),
             pixels(NULL),
-            cpu(){
+            cpu(pixels){
                 cpuFPSCap.init(CPUHZ);
                 this->pixels = pixels;
             };

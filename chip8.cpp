@@ -11,6 +11,7 @@ void Chip8::update() {
         // cpu.cls_func(0x12,0x34);
         // cpu.getHighByte(0x04ff);
         // cpu.getLowByte(0xff0a);
+        // cpu.cls_func(0x00,0x00);
     }
 
     // debug
