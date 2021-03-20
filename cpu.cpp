@@ -276,6 +276,25 @@ void Cpu::executeInstruction(Instruction instruction, unsigned char high, unsign
     }
 }
 
+static unsigned char correctXCoord(unsigned char x, int i) {
+    if (!(x + i > 31)) return x + i;
+    else return (x + i) - 32;
+}
+
+static unsigned char correctYCoord(unsigned char y, int j) {
+    if (!(y + j > 63)) return y + j;
+    else return (y + j) - 64;
+}
+
+char Cpu::getPixelAtCoord(unsigned char x, unsigned char y) {
+    return (*pixels)[(x * 64) + y];
+}
+
+void Cpu::setPixelAtCoord(unsigned char x, unsigned char y, char value) {
+    (*pixels)[(x * 64) + y] = value;
+}
+
+
 unsigned char Cpu::getHighByte(unsigned short int word) {
     return word >> 8;
 }
@@ -457,7 +476,38 @@ void Cpu::rnd_vx_byte_func(unsigned char high, unsigned char low) {
 }
 
 void Cpu::drw_vx_vy_nibble_func(unsigned char high, unsigned char low) {
-    for (int i = 0; i < 2048; i++) (*pixels)[i] = 0;
+    // for (int i = 0; i < 2048; i++) (*pixels)[i] = 0;
+    unsigned char ycoordinate = getLowByte(high);
+    unsigned char xcoordinate = getHighByte(low);
+    unsigned char numberOfBytesToRead = getLowNibble(low);
+    unsigned char bitMask[8] = {
+        0b10000000,
+        0b01000000,
+        0b00100000,
+        0b00010000,
+        0b00001000,
+        0b00000100,
+        0b00000010,
+        0b00000001
+    };
+    bool pixelUnset = 0;
+    for (int i = 0; i < numberOfBytesToRead; i++) {
+        ycoordinate = getLowByte(high);
+        xcoordinate = getHighByte(low);
+        unsigned char currentByte = ram[I+i];
+        for (int j = 0; j < 8; j++) {
+            xcoordinate = correctXCoord(xcoordinate, i);
+            ycoordinate = correctYCoord(ycoordinate, j);
+            unsigned char maskedValue = (currentByte & bitMask[j]) > 0 ? 1 : 0;
+            if (maskedValue == getPixelAtCoord(xcoordinate+i, ycoordinate+j)) {
+                pixelUnset = 1;
+                setPixelAtCoord(xcoordinate+i, ycoordinate+j, 0);
+            } else {
+                setPixelAtCoord(xcoordinate+i, ycoordinate+j, 1);
+            }
+        }
+    }
+    registers[Vf] = pixelUnset;
 }
 
 void Cpu::skp_vx_func(unsigned char high, unsigned char low) {

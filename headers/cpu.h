@@ -75,6 +75,8 @@ class Cpu {
         ~Cpu();
         void step();
         void decrementSoundAndTime();
+        char getPixelAtCoord(unsigned char x, unsigned char y);
+        void setPixelAtCoord(unsigned char x, unsigned char y, char value);
 
         // instruction extraction and execution
         Instruction getInstruction(unsigned char high, unsigned char low);
