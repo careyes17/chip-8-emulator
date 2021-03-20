@@ -559,17 +559,29 @@ void Cpu::add_i_vx_func(unsigned char high, unsigned char low) {
 }
 
 void Cpu::ld_f_vx_func(unsigned char high, unsigned char low) {
-
+    unsigned char highLowNibble = getLowNibble(high);
+    I = registers[highLowNibble] * 5;
 }
 
 void Cpu::ld_b_vx_func(unsigned char high, unsigned char low) {
-
+    unsigned char highLowNibble = getLowNibble(high);
+    ram[I] = (registers[highLowNibble]/100) % 10;
+    ram[I+1] = (registers[highLowNibble]/10) % 10;
+    ram[I+2] = registers[highLowNibble] % 10;
 }
 
 void Cpu::ld_i_vx_func(unsigned char high, unsigned char low) {
-
+    unsigned char highLowNibble = getLowNibble(high);
+    unsigned char numberOfRegisters = registers[highLowNibble];
+    for (int i = 0; i <= numberOfRegisters; i++) {
+        ram[I+i] = registers[i];
+    }
 }
 
 void Cpu::ld_vx_i_func(unsigned char high, unsigned char low) {
-
+    unsigned char highLowNibble = getLowNibble(high);
+    unsigned char numberOfRegisters = registers[highLowNibble];
+    for (int i = 0; i <= numberOfRegisters; i++) {
+        registers[i] = ram[I+i];
+    }
 }
