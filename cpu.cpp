@@ -544,15 +544,18 @@ void Cpu::ld_vx_k_func(unsigned char high, unsigned char low) {
 }
 
 void Cpu::ld_dt_vx_func(unsigned char high, unsigned char low) {
-
+    unsigned char highLowNibble = getLowNibble(high);
+    DT = registers[highLowNibble];
 }
 
 void Cpu::ld_st_vx_func(unsigned char high, unsigned char low) {
-
+    unsigned char highLowNibble = getLowNibble(high);
+    ST = registers[highLowNibble];
 }
 
 void Cpu::add_i_vx_func(unsigned char high, unsigned char low) {
-
+    unsigned char highLowNibble = getLowNibble(high);
+    I += registers[highLowNibble];
 }
 
 void Cpu::ld_f_vx_func(unsigned char high, unsigned char low) {
