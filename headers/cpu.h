@@ -70,6 +70,9 @@ class Cpu {
         unsigned char SP; // 8-bit stack pointer
         unsigned short int stack[16]; // 16 slot 16-bit stack
         std::vector<char>* pixels; // 64 x 32 pixel bitmap
+        char keysPressed[16];
+        char previousKeyPressed;
+        char lastKeyPressed;
     public:
         Cpu(std::vector<char>* pixels);
         ~Cpu();
@@ -77,6 +80,8 @@ class Cpu {
         void decrementSoundAndTime();
         char getPixelAtCoord(unsigned char x, unsigned char y);
         void setPixelAtCoord(unsigned char x, unsigned char y, char value);
+        void updateKeysPressed(char keys[16]);
+        void updateLastKeyPressed(char key);
 
         // instruction extraction and execution
         Instruction getInstruction(unsigned char high, unsigned char low);

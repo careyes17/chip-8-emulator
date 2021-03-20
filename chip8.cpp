@@ -19,4 +19,6 @@ void Chip8::update() {
     if (keyPressed(KEY_A)) printf("a");
     for (int i = 0; i < 2048; i++) (*pixels)[i] = rand() % 2;
     cpu.decrementSoundAndTime();
+    char key = -1;
+    cpu.updateLastKeyPressed(key);
 }

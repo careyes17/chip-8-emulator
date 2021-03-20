@@ -294,6 +294,16 @@ void Cpu::setPixelAtCoord(unsigned char x, unsigned char y, char value) {
     (*pixels)[(x * 64) + y] = value;
 }
 
+void Cpu::updateKeysPressed(char keys[16]) {
+    for (int i = 0; i < 16; i++) {
+        keysPressed[i] = keys[i];
+    }
+}
+
+void Cpu::updateLastKeyPressed(char key) {
+    previousKeyPressed = lastKeyPressed;
+    lastKeyPressed = key;
+}
 
 unsigned char Cpu::getHighByte(unsigned short int word) {
     return word >> 8;
@@ -511,19 +521,26 @@ void Cpu::drw_vx_vy_nibble_func(unsigned char high, unsigned char low) {
 }
 
 void Cpu::skp_vx_func(unsigned char high, unsigned char low) {
-
+    unsigned char highLowNibble = getLowNibble(high);
+    if (keysPressed[registers[highLowNibble]] == 1) PC += 0x04;
 }
 
 void Cpu::sknp_vx_func(unsigned char high, unsigned char low) {
-
+    unsigned char highLowNibble = getLowNibble(high);
+    if (keysPressed[registers[highLowNibble]] == 0) PC += 0x04;
 }
 
 void Cpu::ld_vx_dt_func(unsigned char high, unsigned char low) {
-
+    unsigned char highLowNibble = getLowNibble(high);
+    registers[highLowNibble] = DT;
 }
 
 void Cpu::ld_vx_k_func(unsigned char high, unsigned char low) {
-
+    unsigned char highLowNibble = getLowNibble(high);
+    if (previousKeyPressed == -1 && lastKeyPressed != -1) {
+        registers[highLowNibble] = lastKeyPressed;
+        PC += 0x02;
+    }
 }
 
 void Cpu::ld_dt_vx_func(unsigned char high, unsigned char low) {
