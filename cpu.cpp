@@ -334,7 +334,7 @@ void Cpu::sne_vx_btye_func(unsigned char high, unsigned char low) {
 }
 
 void Cpu::se_vx_vy_func(unsigned char high, unsigned char low) {
-    unsigned char highLowNibble = high = getLowNibble(high);
+    unsigned char highLowNibble = getLowNibble(high);
     unsigned char vx = registers[highLowNibble];
     unsigned char lowHighNibble = getHighNibble(low);
     unsigned char vy = registers[lowHighNibble];
@@ -342,68 +342,122 @@ void Cpu::se_vx_vy_func(unsigned char high, unsigned char low) {
 }
 
 void Cpu::ld_vx_byte_func(unsigned char high, unsigned char low) {
-    unsigned char highLowNibble = high = getLowNibble(high);
+    unsigned char highLowNibble = getLowNibble(high);
     registers[highLowNibble] = low;
 }
 
 void Cpu::add_vx_byte_func(unsigned char high, unsigned char low) {
-
+    unsigned char highLowNibble = getLowNibble(high);
+    registers[highLowNibble] += low;
 }
 
 void Cpu::ld_vx_vy_func(unsigned char high, unsigned char low) {
-
+    unsigned char highLowNibble = getLowNibble(high);
+    unsigned char lowHighNibble = getHighNibble(low);
+    registers[highLowNibble] = registers[lowHighNibble];
 }
 
 void Cpu::or_vx_vy_func(unsigned char high, unsigned char low) {
-
+    unsigned char highLowNibble = getLowNibble(high);
+    unsigned char lowHighNibble = getHighNibble(low);
+    registers[highLowNibble] = registers[highLowNibble] | registers[lowHighNibble];
 }
 
 void Cpu::and_vx_vy_func(unsigned char high, unsigned char low) {
-
+    unsigned char highLowNibble = getLowNibble(high);
+    unsigned char lowHighNibble = getHighNibble(low);
+    registers[highLowNibble] = registers[highLowNibble] & registers[lowHighNibble];
 }
 
 void Cpu::xor_vx_vy_func(unsigned char high, unsigned char low) {
-
+    unsigned char highLowNibble = getLowNibble(high);
+    unsigned char lowHighNibble = getHighNibble(low);
+    registers[highLowNibble] = registers[highLowNibble] ^ registers[lowHighNibble];
 }
 
 void Cpu::add_vx_vy_func(unsigned char high, unsigned char low) {
-
+    unsigned char highLowNibble = getLowNibble(high);
+    unsigned char lowHighNibble = getHighNibble(low);
+    if (registers[highLowNibble] + registers[lowHighNibble] > 255) {
+        registers[Vf] = 1;
+        registers[highLowNibble] = (registers[highLowNibble] + registers[lowHighNibble]) & 0xff;
+    } else {
+        registers[Vf] = 0;
+        registers[highLowNibble] = registers[highLowNibble] + registers[lowHighNibble];
+    }
 }
 
 void Cpu::sub_vx_vy_func(unsigned char high, unsigned char low) {
-
+    unsigned char highLowNibble = getLowNibble(high);
+    unsigned char lowHighNibble = getHighNibble(low);
+    if (registers[highLowNibble] > registers[lowHighNibble]) {
+        registers[Vf] = 1;
+        registers[highLowNibble] = registers[highLowNibble] - registers[lowHighNibble];
+    } else {
+        registers[Vf] = 0;
+        registers[highLowNibble] = registers[highLowNibble] - registers[lowHighNibble];
+    }
 }
 
 void Cpu::shr_vx_vy_func(unsigned char high, unsigned char low) {
-
+    unsigned char highLowNibble = getLowNibble(high);
+    if ((registers[highLowNibble] & 0b00000001) == 1) {
+        registers[Vf] = 1;
+        registers[highLowNibble] = registers[highLowNibble] >> 1;
+    } else {
+        registers[Vf] = 0;
+        registers[highLowNibble] = registers[highLowNibble] >> 1;
+    }
 }
 
 void Cpu::subn_vx_vy_func(unsigned char high, unsigned char low) {
-
+    unsigned char highLowNibble = getLowNibble(high);
+    unsigned char lowHighNibble = getHighNibble(low);
+    if (registers[lowHighNibble] > registers[highLowNibble]) {
+        registers[Vf] = 1;
+        registers[highLowNibble] = registers[lowHighNibble] - registers[highLowNibble];
+    } else {
+        registers[Vf] = 0;
+        registers[highLowNibble] = registers[lowHighNibble] - registers[highLowNibble];
+    }
 }
 
 void Cpu::shl_vx_vy_func(unsigned char high, unsigned char low) {
-
+    unsigned char highLowNibble = getLowNibble(high);
+    if ((registers[highLowNibble] & 0b10000000) == 1) {
+        registers[Vf] = 1;
+        registers[highLowNibble] = registers[highLowNibble] << 1;
+    } else {
+        registers[Vf] = 0;
+        registers[highLowNibble] = registers[highLowNibble] << 1;
+    }
 }
 
 void Cpu::sne_vx_vy_func(unsigned char high, unsigned char low) {
-
+    unsigned char highLowNibble = getLowNibble(high);
+    unsigned char lowHighNibble = getHighNibble(low);
+    if (highLowNibble != lowHighNibble) PC += 0x04;
 }
 
 void Cpu::ld_i_addr_func(unsigned char high, unsigned char low) {
-
+    unsigned char highLowNibble = getLowNibble(high);
+    I = createAddress(highLowNibble, low);
 }
 
 void Cpu::jp_v0_addr_func(unsigned char high, unsigned char low) {
-
+    unsigned char highLowNibble = getLowNibble(high);
+    unsigned short int address = createAddress(highLowNibble, low) + registers[V0];
+    PC = address;
 }
 
 void Cpu::rnd_vx_byte_func(unsigned char high, unsigned char low) {
-
+    unsigned char highLowNibble = getLowNibble(high);
+    unsigned char randomNumber = rand() % 256;
+    registers[highLowNibble] = (randomNumber & low);
 }
 
 void Cpu::drw_vx_vy_nibble_func(unsigned char high, unsigned char low) {
-
+    for (int i = 0; i < 2048; i++) (*pixels)[i] = 0;
 }
 
 void Cpu::skp_vx_func(unsigned char high, unsigned char low) {
