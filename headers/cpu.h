@@ -78,6 +78,7 @@ class Cpu {
         ~Cpu();
         void step();
         void decrementSoundAndTime();
+        void loadGameRomIntoRam(const char* filename);
         char getPixelAtCoord(unsigned char x, unsigned char y);
         void setPixelAtCoord(unsigned char x, unsigned char y, char value);
         void updateKeysPressed(char keys[16]);

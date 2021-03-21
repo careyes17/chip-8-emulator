@@ -9,10 +9,7 @@ struct Pixels {
         // resizing pixels vector to appropriate size
         this->pixels = new std::vector<char>();
         pixels->resize(0);
-        pixels->resize(numOfTotalPixels, 1);
-
-        // setting random test values in pixels
-        for (int i = 0; i < numOfTotalPixels; i++) (*pixels)[i] = rand() % 2;
+        pixels->resize(numOfTotalPixels, 0);
     };
     void destroy() {
         delete pixels;

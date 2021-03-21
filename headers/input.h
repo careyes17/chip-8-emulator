@@ -41,7 +41,7 @@ enum key {
     KEY_9 = 38
 };
 
-bool keyPressed(key KEY) {
+static bool keyPressed(key KEY) {
     const Uint8* keystate = SDL_GetKeyboardState(NULL);
     if(keystate[KEY]) return true;
     else return false;
