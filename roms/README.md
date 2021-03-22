@@ -1,0 +1,1 @@
+This folder is meant to contain the roms used by the emulator.

@@ -70,7 +70,11 @@ Cpu::Cpu(std::vector<char>* pixels) {
 
     this->pixels = pixels;
 
-    loadGameRomIntoRam("ibmlogo.ch8");
+    // for (int i = 0; i < pixels->size(); i++) {
+    //     printf("(%d)", (*pixels)[i]);
+    // }
+
+    loadGameRomIntoRam("roms/.ch8");
 
     DT = 0;
     ST = 0;
@@ -131,9 +135,9 @@ void Cpu::loadGameRomIntoRam(const char* filename) {
     for (int i = 0; i < sizeOfGameRom; i++) { // 16 characters
         const char* s = i % 10 == 0 ? "\n" : " ";
         printf("%02x%s", gameRom[i], s);
-        ram[200+i] = gameRom[i];
+        ram[512+i] = gameRom[i];
     }
-    PC = 200;
+    PC = 512;
 }
 
 Instruction Cpu::getInstruction(unsigned char high, unsigned char low) {
@@ -321,11 +325,12 @@ static unsigned char correctYCoord(unsigned char y, int j) {
 }
 
 char Cpu::getPixelAtCoord(unsigned char x, unsigned char y) {
-    return (*pixels)[(x * 64) + y];
+    // printf(" (%d, %d, %d) ", x, y, ((x * 64)+y));
+    return (*pixels)[(x * 64)+y];
 }
 
 void Cpu::setPixelAtCoord(unsigned char x, unsigned char y, char value) {
-    (*pixels)[(x * 64) + y] = value;
+    (*pixels)[(x * 64)+y] = value;
 }
 
 void Cpu::updateKeysPressed(char keys[16]) {
@@ -503,7 +508,7 @@ void Cpu::subn_vx_vy_func(unsigned char high, unsigned char low) {
 
 void Cpu::shl_vx_vy_func(unsigned char high, unsigned char low) {
     unsigned char highLowNibble = getLowNibble(high);
-    if ((registers[highLowNibble] & 0b10000000) == 1) {
+    if ((registers[highLowNibble] & 0b10000000) == 128) {
         registers[Vf] = 1;
         registers[highLowNibble] = registers[highLowNibble] << 1;
     } else {
@@ -561,15 +566,19 @@ void Cpu::drw_vx_vy_nibble_func(unsigned char high, unsigned char low) {
         xcoordinate = registers[getHighByte(low)];
         unsigned char currentByte = ram[I+i];
         for (int j = 0; j < 8; j++) {
+            ycoordinate = registers[getLowByte(high)];
+            xcoordinate = registers[getHighByte(low)];
             xcoordinate = correctXCoord(xcoordinate, i);
             ycoordinate = correctYCoord(ycoordinate, j);
-            printf("-%d- ", ram[I+i]);
+            // printf("(%d, %d)", xcoordinate, ycoordinate);
+            // printf("(%d)", currentByte);
+            // printf("(%d)", numberOfBytesToRead);
             unsigned char maskedValue = (currentByte & bitMask[j]) > 0 ? 1 : 0;
-            if (maskedValue == getPixelAtCoord(xcoordinate+i, ycoordinate+j)) {
+            if (maskedValue == getPixelAtCoord(xcoordinate, ycoordinate)) {
                 pixelUnset = 1;
-                setPixelAtCoord(xcoordinate+i, ycoordinate+j, 0);
+                setPixelAtCoord(xcoordinate, ycoordinate, 0);
             } else {
-                setPixelAtCoord(xcoordinate+i, ycoordinate+j, 1);
+                setPixelAtCoord(xcoordinate, ycoordinate, 1);
             }
         }
     }
