@@ -313,14 +313,6 @@ void Cpu::updateLastKeyPressed(char key) {
     lastKeyPressed = key;
 }
 
-unsigned char Cpu::getHighByte(unsigned char word) {
-    return word >> 4;
-}
-
-unsigned char Cpu::getLowByte(unsigned char word) {
-    return word & 0x0f;
-}
-
 unsigned char Cpu::getHighNibble(unsigned char byte) {
     return (byte & 0b11110000) >> 4;
 }
@@ -532,8 +524,8 @@ void Cpu::drw_vx_vy_nibble_func(unsigned char high, unsigned char low) {
     for (int i = 0; i < numberOfBytesToRead; i++) {
         unsigned char currentByte = ram[I+i];
         for (int j = 0; j < 8; j++) {
-            ycoordinate = registers[getLowByte(high)];
-            xcoordinate = registers[getHighByte(low)];
+            ycoordinate = registers[getLowNibble(high)];
+            xcoordinate = registers[getHighNibble(low)];
             xcoordinate = correctXCoord(xcoordinate, i);
             ycoordinate = correctYCoord(ycoordinate, j);
             unsigned char maskedValue = (currentByte & bitMask[j]) > 0 ? 1 : 0;
