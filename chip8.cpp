@@ -51,6 +51,8 @@ void Chip8::update() {
         if (keyPressed(keyCodes[i])) {
             key = i;
             keys[i] = 1;
+        } else {
+            keys[i] = 0;
         }
     }
     cpu.updateLastKeyPressed(key);

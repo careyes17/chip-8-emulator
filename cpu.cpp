@@ -74,24 +74,18 @@ Cpu::Cpu(std::vector<char>* pixels) {
     //     printf("(%d)", (*pixels)[i]);
     // }
 
-    loadGameRomIntoRam("roms/test_opcode.ch8");
+    loadGameRomIntoRam("roms/.ch8");
 
     DT = 0;
     ST = 0;
     I = 0;
-    SP = 0;
+    SP = -1;
 
-    // testing low high nibble getters
-    // unsigned char test = 0b10111101;
-    // printf("high nibble %d\n", getHighNibble(test));
-    // printf("low nibble %d\n", getLowNibble(test));
-
-    // display characters for debug
-    // for (int i = 0; i < 16; i++) { // 16 characters
-    //     for (int j = 0; j < 5; j++) { // 5 bytes per character
-    //         printf("%d\n", ram[5*i + j]);
-    //     }
-    // }
+    for (int i = 0; i < 16; i++) {
+        registers[i] = 0;
+        stack[i] = 0;
+        keysPressed[i] = 0;
+    }
 };
 
 Cpu::~Cpu(){};
@@ -104,6 +98,14 @@ void Cpu::step() {
 
     // execute instruction
     executeInstruction(nextInstruction, ram[PC], ram[PC+1]);
+    
+    // keypress debug
+    // for (int i = 0; i < 16; i++) printf("%d, ", keysPressed[i]);
+    // printf("%d", lastKeyPressed);
+    // printf("\n"); 
+    
+    // PC instruction debug
+    // printf("%02x%02x\n", ram[PC], ram[PC+1]);
 }
 
 void Cpu::decrementSoundAndTime() {
@@ -378,9 +380,8 @@ void Cpu::cls_func(unsigned char high, unsigned char low) {
 }
 
 void Cpu::ret_func(unsigned char high, unsigned char low) {
-    printf("SP: %d, Stack at SP: %d\n", SP, stack[SP]);
-    for (int i = 0; i < 16; i++) printf("-> %d\n", stack[i]);
     PC = stack[SP];
+    stack[SP] = 0;
     SP--;
 }
 
@@ -391,7 +392,7 @@ void Cpu::jp_addr_func(unsigned char high, unsigned char low) {
 
 void Cpu::call_addr_func(unsigned char high, unsigned char low) {
     SP++;
-    stack[SP] = PC;
+    stack[SP] = PC + 0x02;
     unsigned char highLowNibble = getLowNibble(high);
     PC = createAddress(highLowNibble, low);
 }
@@ -535,7 +536,6 @@ void Cpu::sne_vx_vy_func(unsigned char high, unsigned char low) {
 void Cpu::ld_i_addr_func(unsigned char high, unsigned char low) {
     unsigned char highLowNibble = getLowNibble(high);
     I = createAddress(highLowNibble, low);
-    // printf(">>%02x, %02x, %04x<<", highLowNibble, low, I);
     PC += 0x02;
 }
 
@@ -555,7 +555,6 @@ void Cpu::rnd_vx_byte_func(unsigned char high, unsigned char low) {
 void Cpu::drw_vx_vy_nibble_func(unsigned char high, unsigned char low) {
     unsigned char ycoordinate = registers[getLowByte(high)];
     unsigned char xcoordinate = registers[getHighByte(low)];
-    // printf("~~~(%d, %d)~~~", getLowByte(high), getHighByte(low));
     unsigned char numberOfBytesToRead = getLowNibble(low);
     unsigned char bitMask[8] = {
         0b10000000,
@@ -579,8 +578,12 @@ void Cpu::drw_vx_vy_nibble_func(unsigned char high, unsigned char low) {
             // printf("(%d)", currentByte);
             // printf("(%d)", numberOfBytesToRead);
             unsigned char maskedValue = (currentByte & bitMask[j]) > 0 ? 1 : 0;
-            if (getPixelAtCoord(xcoordinate, ycoordinate) == maskedValue) pixelUnset = 1;
-            setPixelAtCoord(xcoordinate, ycoordinate, maskedValue);
+            if (getPixelAtCoord(xcoordinate, ycoordinate) == 1 && maskedValue == 1) {
+                pixelUnset = 1;
+                setPixelAtCoord(xcoordinate, ycoordinate, 0);
+            } else if (getPixelAtCoord(xcoordinate, ycoordinate) == 0 && maskedValue == 0) {
+                setPixelAtCoord(xcoordinate, ycoordinate, 0);
+            } else setPixelAtCoord(xcoordinate, ycoordinate, 1);
         }
     }
     registers[Vf] = pixelUnset;
@@ -647,8 +650,7 @@ void Cpu::ld_b_vx_func(unsigned char high, unsigned char low) {
 
 void Cpu::ld_i_vx_func(unsigned char high, unsigned char low) {
     unsigned char highLowNibble = getLowNibble(high);
-    unsigned char numberOfRegisters = registers[highLowNibble];
-    for (int i = 0; i <= numberOfRegisters; i++) {
+    for (int i = 0; i <= highLowNibble; i++) {
         ram[I+i] = registers[i];
     }
     PC += 0x02;
@@ -656,8 +658,7 @@ void Cpu::ld_i_vx_func(unsigned char high, unsigned char low) {
 
 void Cpu::ld_vx_i_func(unsigned char high, unsigned char low) {
     unsigned char highLowNibble = getLowNibble(high);
-    unsigned char numberOfRegisters = registers[highLowNibble];
-    for (int i = 0; i <= numberOfRegisters; i++) {
+    for (int i = 0; i <= highLowNibble; i++) {
         registers[i] = ram[I+i];
     }
     PC += 0x02;
