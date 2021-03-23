@@ -2,44 +2,6 @@
 #include <fstream>
 #include <vector>
 
-/* instructions
-    0nnn - SYS addr
-    00E0 - CLS
-    00EE - RET
-    1nnn - JP addr
-    2nnn - CALL addr
-    3xkk - SE Vx, byte
-    4xkk - SNE Vx, byte
-    5xy0 - SE Vx, Vy
-    6xkk - LD Vx, byte
-    7xkk - ADD Vx, byte
-    8xy0 - LD Vx, Vy
-    8xy1 - OR Vx, Vy
-    8xy2 - AND Vx, Vy
-    8xy3 - XOR Vx, Vy
-    8xy4 - ADD Vx, Vy
-    8xy5 - SUB Vx, Vy
-    8xy6 - SHR Vx {, Vy}
-    8xy7 - SUBN Vx, Vy
-    8xyE - SHL Vx {, Vy}
-    9xy0 - SNE Vx, Vy
-    Annn - LD I, addr
-    Bnnn - JP V0, addr
-    Cxkk - RND Vx, byte
-    Dxyn - DRW Vx, Vy, nibble
-    Ex9E - SKP Vx
-    ExA1 - SKNP Vx
-    Fx07 - LD Vx, DT
-    Fx0A - LD Vx, K
-    Fx15 - LD DT, Vx
-    Fx18 - LD ST, Vx
-    Fx1E - ADD I, Vx
-    Fx29 - LD F, Vx
-    Fx33 - LD B, Vx
-    Fx55 - LD [I], Vx
-    Fx65 - LD Vx, [I]
-*/
-
 Cpu::Cpu(std::vector<char>* pixels) {
     // init characters in "interpreter" portion of ram
     // this takes up 16 * 5 (80) bytes at the start of ram
@@ -69,10 +31,6 @@ Cpu::Cpu(std::vector<char>* pixels) {
     }
 
     this->pixels = pixels;
-
-    // for (int i = 0; i < pixels->size(); i++) {
-    //     printf("(%d)", (*pixels)[i]);
-    // }
 
     loadGameRomIntoRam("roms/.ch8");
 
@@ -139,7 +97,7 @@ void Cpu::loadGameRomIntoRam(const char* filename) {
         printf("%02x%s", gameRom[i], s);
         ram[512+i] = gameRom[i];
     }
-    PC = 512;
+    PC = 512; // 200 hex
 }
 
 Instruction Cpu::getInstruction(unsigned char high, unsigned char low) {
@@ -202,113 +160,112 @@ Instruction Cpu::getInstruction(unsigned char high, unsigned char low) {
 }
 
 void Cpu::executeInstruction(Instruction instruction, unsigned char high, unsigned char low) {
-    // switch statement targeting the correct function per instruction
     switch(instruction) {
-        case ERROR:
+        case ERROR: // an invalid instruction is given
             break;
-        case SYS_ADDR:
+        case SYS_ADDR: // 0nnn - SYS addr
             sys_addr_func(high, low);
             break;
-        case CLS:
+        case CLS: // 00E0 - CLS
             cls_func(high, low);
             break;
-        case RET:
+        case RET: // 00EE - RET
             ret_func(high, low);
             break;
-        case JP_ADDR: 
+        case JP_ADDR: // 1nnn - JP addr
             jp_addr_func(high, low);
             break;
-        case CALL_ADDR:
+        case CALL_ADDR: // 2nnn - CALL addr
             call_addr_func(high, low);
             break;
-        case SE_VX_BYTE:
+        case SE_VX_BYTE: // 3xkk - SE Vx, byte
             se_vx_byte_func(high, low);
             break;
-        case SNE_VX_BYTE:
+        case SNE_VX_BYTE: // 4xkk - SNE Vx, byte
             sne_vx_btye_func(high, low);
             break;
-        case SE_VX_VY:
+        case SE_VX_VY: // 5xy0 - SE Vx, Vy
             se_vx_vy_func(high, low);
             break;
-        case LD_VX_BYTE:
+        case LD_VX_BYTE: // 6xkk - LD Vx, byte
             ld_vx_byte_func(high, low);
             break;
-        case ADD_VX_BYTE:
+        case ADD_VX_BYTE: // 7xkk - ADD Vx, byte
             add_vx_byte_func(high, low);
             break;
-        case LD_VX_VY:
+        case LD_VX_VY: // 8xy0 - LD Vx, Vy
             ld_vx_vy_func(high, low);
             break;
-        case OR_VX_VY:
+        case OR_VX_VY: // 8xy1 - OR Vx, Vy
             or_vx_vy_func(high, low);
             break;
-        case AND_VX_VY:
+        case AND_VX_VY: // 8xy2 - AND Vx, Vy
             and_vx_vy_func(high, low);
             break;
-        case XOR_VX_VY:
+        case XOR_VX_VY: // 8xy3 - XOR Vx, Vy
             xor_vx_vy_func(high, low);
             break;
-        case ADD_VX_VY:
+        case ADD_VX_VY: // 8xy4 - ADD Vx, Vy
             add_vx_vy_func(high, low);
             break;
-        case SUB_VX_VY:
+        case SUB_VX_VY: // 8xy5 - SUB Vx, Vy
             sub_vx_vy_func(high, low);
             break;
-        case SHR_VX_VY:
+        case SHR_VX_VY: // 8xy6 - SHR Vx {, Vy}
             shr_vx_vy_func(high, low);
             break;
-        case SUBN_VX_VY:
+        case SUBN_VX_VY: // 8xy7 - SUBN Vx, Vy
             subn_vx_vy_func(high, low);
             break;
-        case SHL_VX_VY:
-            shl_vx_vy_func(high, low);
+        case SHL_VX_VY: // 8xyE - SHL Vx {, Vy}
+            shl_vx_vy_func(high, low); 
             break;
-        case SNE_VX_VY:
+        case SNE_VX_VY: // 9xy0 - SNE Vx, Vy
             sne_vx_vy_func(high, low);
             break;
-        case LD_I_ADDR:
+        case LD_I_ADDR: // Annn - LD I, addr
             ld_i_addr_func(high, low);
             break;
-        case JP_V0_ADDR:
+        case JP_V0_ADDR: // Bnnn - JP V0, addr
             jp_v0_addr_func(high, low);
             break;
-        case RND_VX_BYTE:
+        case RND_VX_BYTE: // Cxkk - RND Vx, byte
             rnd_vx_byte_func(high, low);
             break;
-        case DRW_VX_VY_NIBBLE:
+        case DRW_VX_VY_NIBBLE: // Dxyn - DRW Vx, Vy, nibble
             drw_vx_vy_nibble_func(high, low);
             break;
-        case SKP_VX:
+        case SKP_VX: // Ex9E - SKP Vx
             skp_vx_func(high, low);
             break;
-        case SKNP_VX:
+        case SKNP_VX: // ExA1 - SKNP Vx
             sknp_vx_func(high, low);
             break;
-        case LD_VX_DT:
+        case LD_VX_DT: // Fx07 - LD Vx, DT
             ld_vx_dt_func(high, low);
             break;
-        case LD_VX_K:
+        case LD_VX_K: // Fx0A - LD Vx, K
             ld_vx_k_func(high, low);
             break;
-        case LD_DT_VX:
+        case LD_DT_VX: // Fx15 - LD DT, Vx
             ld_dt_vx_func(high, low);
             break;
-        case LD_ST_VX:
+        case LD_ST_VX: // Fx18 - LD ST, Vx
             ld_st_vx_func(high, low);
             break;
-        case ADD_I_VX:
+        case ADD_I_VX: // Fx1E - ADD I, Vx
             add_i_vx_func(high, low);
             break;
-        case LD_F_VX:
+        case LD_F_VX: // Fx29 - LD F, Vx
             ld_f_vx_func(high, low);
             break;
-        case LD_B_VX:
+        case LD_B_VX: // Fx33 - LD B, Vx
             ld_b_vx_func(high, low);
             break;
-        case LD_I_VX:
+        case LD_I_VX: // Fx55 - LD [I], Vx
             ld_i_vx_func(high, low);
             break;
-        case LD_VX_I:
+        case LD_VX_I: // Fx65 - LD Vx, [I]
             ld_vx_i_func(high, low);
             break;
         default:
@@ -317,13 +274,11 @@ void Cpu::executeInstruction(Instruction instruction, unsigned char high, unsign
 }
 
 static unsigned char correctXCoord(unsigned char x, int i) {
-    // printf("$X:%d$ ", x+i);
     if (!(x + i > 31)) return x + i;
     else return (x + i) - 32;
 }
 
 static unsigned char correctYCoord(unsigned char y, int j) {
-    // printf("$Y:%d$\n", y+j);
     if (!(y + j > 63)) return y + j;
     else return (y + j) - 64;
 }
@@ -333,7 +288,6 @@ unsigned char Cpu::getST() {
 }
 
 char Cpu::getPixelAtCoord(unsigned char x, unsigned char y) {
-    // printf(" (%d, %d, %d) ", x, y, ((x * 64)+y));
     return (*pixels)[((x * 64)+y)];
 }
 
@@ -426,16 +380,13 @@ void Cpu::se_vx_vy_func(unsigned char high, unsigned char low) {
 
 void Cpu::ld_vx_byte_func(unsigned char high, unsigned char low) {
     unsigned char highLowNibble = getLowNibble(high);
-    // printf("*****(%d, %d)*******", highLowNibble, low);
     registers[highLowNibble] = low;
     PC += 0x02;
 }
 
 void Cpu::add_vx_byte_func(unsigned char high, unsigned char low) {
     unsigned char highLowNibble = getLowNibble(high);
-    // printf("$%d + %d$", registers[highLowNibble], low);
     registers[highLowNibble] += low;
-    // printf("$%d$", registers[highLowNibble]);
     PC += 0x02;
 }
 
@@ -557,8 +508,8 @@ void Cpu::rnd_vx_byte_func(unsigned char high, unsigned char low) {
 }
 
 void Cpu::drw_vx_vy_nibble_func(unsigned char high, unsigned char low) {
-    unsigned char ycoordinate = registers[getLowByte(high)];
-    unsigned char xcoordinate = registers[getHighByte(low)];
+    unsigned char ycoordinate;
+    unsigned char xcoordinate;
     unsigned char numberOfBytesToRead = getLowNibble(low);
     unsigned char bitMask[8] = {
         0b10000000,
@@ -576,11 +527,8 @@ void Cpu::drw_vx_vy_nibble_func(unsigned char high, unsigned char low) {
         for (int j = 0; j < 8; j++) {
             ycoordinate = registers[getLowByte(high)];
             xcoordinate = registers[getHighByte(low)];
-            // printf("(%d, %d)", xcoordinate, ycoordinate);
             xcoordinate = correctXCoord(xcoordinate, i);
             ycoordinate = correctYCoord(ycoordinate, j);
-            // printf("(%d)", currentByte);
-            // printf("(%d)", numberOfBytesToRead);
             unsigned char maskedValue = (currentByte & bitMask[j]) > 0 ? 1 : 0;
             if (getPixelAtCoord(xcoordinate, ycoordinate) == 1 && maskedValue == 1) {
                 pixelUnset = 1;
@@ -655,16 +603,12 @@ void Cpu::ld_b_vx_func(unsigned char high, unsigned char low) {
 
 void Cpu::ld_i_vx_func(unsigned char high, unsigned char low) {
     unsigned char highLowNibble = getLowNibble(high);
-    for (int i = 0; i <= highLowNibble; i++) {
-        ram[I+i] = registers[i];
-    }
+    for (int i = 0; i <= highLowNibble; i++) ram[I+i] = registers[i];
     PC += 0x02;
 }
 
 void Cpu::ld_vx_i_func(unsigned char high, unsigned char low) {
     unsigned char highLowNibble = getLowNibble(high);
-    for (int i = 0; i <= highLowNibble; i++) {
-        registers[i] = ram[I+i];
-    }
+    for (int i = 0; i <= highLowNibble; i++) registers[i] = ram[I+i];
     PC += 0x02;
 }
