@@ -612,6 +612,7 @@ void Cpu::ld_vx_k_func(unsigned char high, unsigned char low) {
     unsigned char highLowNibble = getLowNibble(high);
     if (previousKeyPressed == -1 && lastKeyPressed != -1) {
         registers[highLowNibble] = lastKeyPressed;
+        updateLastKeyPressed(lastKeyPressed);
         PC += 0x02;
     }
 }
