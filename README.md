@@ -28,9 +28,9 @@ Once you have the `main` executable created and you have some ROMs in the `roms`
 `./main <filename.ch8>`
 
 ## Controls
-Chip-8 implementations makes use of a very strange key layout that was representative of DIY low-spec computers of the time. Instead of having a QWERTY style keyboard that we are familiar with today, computers that implemented Chip-8 used a 16-key keyboard. This 16-key keyboard represents a nibble's worth of storage space, representing 0 to 15 (or 0 to f) in hex.
+Chip-8 implementations makes use of a very strange key layout that was representative of DIY low-spec computers of the time. Instead of having a QWERTY style keyboard that we are familiar with today, computers that implemented Chip-8 used a 16-key keyboard. This 16-key keyboard represents a nibble's worth of storage space, representing 0 to 15 (or 0 to F) in hex.
 
-The keyboard layout this implementation of Chip-8 is labeled `Emulator` in following diagram.
+The keyboard layout for this implementation of Chip-8 is labeled `Emulator` in following diagram.
 
 ```
  Original              Emulator
