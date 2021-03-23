@@ -29,7 +29,7 @@ struct FPSUncapped {
     int frames;
     int lastTime;
     void printFPS() {
-        std::cout << "FPS: " << frames << std::endl;
+        // std::cout << "FPS: " << frames << std::endl;
     }
     void init() {
         frames = 0;
