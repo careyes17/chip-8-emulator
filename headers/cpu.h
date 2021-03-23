@@ -74,7 +74,7 @@ class Cpu {
         char previousKeyPressed;
         char lastKeyPressed;
     public:
-        Cpu(std::vector<char>* pixels);
+        Cpu(std::vector<char>* pixels, const char* filename);
         ~Cpu();
         void step();
         void decrementSoundAndTime();

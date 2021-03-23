@@ -27,10 +27,10 @@ const key keyCodes[16] = {
     KEY_V // F
 };
 
-Chip8::Chip8(std::vector<char>* pixels):
+Chip8::Chip8(std::vector<char>* pixels, const char* filename):
     Engine(SCREENWIDTH, SCREENHEIGHT, PIXELWIDTH, PIXELHEIGHT, FPS, pixels),
     pixels(NULL),
-    cpu(pixels){
+    cpu(pixels, filename){
         cpuFPSCap.init(CPUHZ);
         this->pixels = pixels;
     };

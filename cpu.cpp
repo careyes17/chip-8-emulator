@@ -1,8 +1,9 @@
 #include "headers/cpu.h"
 #include <fstream>
+#include <sstream>
 #include <vector>
 
-Cpu::Cpu(std::vector<char>* pixels) {
+Cpu::Cpu(std::vector<char>* pixels, const char* filename) {
     // init characters in "interpreter" portion of ram
     // this takes up 16 * 5 (80) bytes at the start of ram
     unsigned char characters[16][5] = {
@@ -32,7 +33,11 @@ Cpu::Cpu(std::vector<char>* pixels) {
 
     this->pixels = pixels;
 
-    loadGameRomIntoRam("roms/.ch8");
+    std::stringstream ss;
+    ss << "roms/" << filename;
+    const char* path = ss.str().c_str();
+    std::cout << path;
+    loadGameRomIntoRam(path);
 
     DT = 0;
     ST = 0;
@@ -93,8 +98,10 @@ void Cpu::loadGameRomIntoRam(const char* filename) {
     std::vector<unsigned char> gameRom = readRom(filename);
     int sizeOfGameRom = gameRom.size();
     for (int i = 0; i < sizeOfGameRom; i++) { // 16 characters
-        const char* s = i % 10 == 0 ? "\n" : " ";
-        printf("%02x%s", gameRom[i], s);
+        // hexdump of ROM
+        // const char* s = i % 10 == 0 ? "\n" : " ";
+        // printf("%02x%s", gameRom[i], s);
+        
         ram[512+i] = gameRom[i];
     }
     PC = 512; // 200 hex

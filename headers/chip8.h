@@ -9,7 +9,7 @@ class Chip8 : public Engine {
         Cpu cpu;
         FPSCapped cpuFPSCap;
     public:
-        Chip8(std::vector<char>* pixels);
+        Chip8(std::vector<char>* pixels, const char* filename);
         ~Chip8(){};
         void update() override;
 };
