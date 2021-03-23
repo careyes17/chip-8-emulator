@@ -4,6 +4,13 @@ A cross-platform [Chip-8](https://en.wikipedia.org/wiki/CHIP-8) emulator written
 ## Background Information
 Chip-8 is an interpreted programming language that was first implemented in the mid-1970s as a means of developing games for low-spec computers that are also portable. Chip-8 programs (games) run on a virtual machine.
 
+## Examples
+### Space Invaders
+![Space Invaders](./screenshots/spaceinvaders.gif)
+
+### Breakout
+![Breakout](./screenshots/breakout.gif)
+
 ## Usage
 This project makes use of one external dependency to handle interfacing with platform specific API calls [SDL2](https://www.libsdl.org/). You must have this installed in order to compile this project.
 

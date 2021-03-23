@@ -31,7 +31,7 @@ void Video::init() {
     } else {
         // create window
         window = SDL_CreateWindow(
-            "Game",
+            "Chip-8",
             SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED,
             props.screenWidth,
