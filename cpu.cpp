@@ -328,6 +328,10 @@ static unsigned char correctYCoord(unsigned char y, int j) {
     else return (y + j) - 64;
 }
 
+unsigned char Cpu::getST() {
+    return this->ST;
+}
+
 char Cpu::getPixelAtCoord(unsigned char x, unsigned char y) {
     // printf(" (%d, %d, %d) ", x, y, ((x * 64)+y));
     return (*pixels)[((x * 64)+y)];

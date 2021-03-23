@@ -35,9 +35,15 @@ Sound::~Sound() {
 }
 
 void Sound::play() {
+    this->playing = true;
     SDL_PauseAudio(0); // start playing sound
 }
 
 void Sound::stop() {
+    this->playing = false;
     SDL_PauseAudio(1); // stop playing sound
+}
+
+bool Sound::isPlaying() {
+    return this->playing;
 }

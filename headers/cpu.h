@@ -83,6 +83,7 @@ class Cpu {
         void setPixelAtCoord(unsigned char x, unsigned char y, char value);
         void updateKeysPressed(char keys[16]);
         void updateLastKeyPressed(char key);
+        unsigned char getST();
 
         // instruction extraction and execution
         Instruction getInstruction(unsigned char high, unsigned char low);

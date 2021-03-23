@@ -45,6 +45,9 @@ void Chip8::update() {
 
     // operations happen at 60 hz
     cpu.decrementSoundAndTime();
+    if (!sound.isPlaying() && cpu.getST() > 0) sound.play();
+    else if (sound.isPlaying() && cpu.getST() < 1) sound.stop();
+
     char key = -1;
     char keys[16];
     for (int i = 0; i < 16; i++) {
